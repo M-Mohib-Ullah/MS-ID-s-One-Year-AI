@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIT | Microsoft ID Finder</title>
+
+<style>
+:root {
+    --navy: #101b35;
+    --blue: #2563eb;
+    --ink: #17233b;
+    --muted: #71809b;
+    --line: #e4eaf3;
+    --bg: #f3f6fb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 10% 5%, #e3ebff, transparent 32%), var(--bg);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+
+header {
+    height: 76px;
+    background: var(--navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    background: white;
+    color: var(--blue);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+}
+
+.brand small {
+    display: block;
+    font-size: 10px;
+    color: #aebbd3;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+}
+
+.header-label {
+    border: 1px solid #ffffff40;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #c8d2e5;
+}
+
+/* MAIN */
+
+main {
+    width: min(780px, 92%);
+    margin: 50px auto 35px;
+    flex: 1;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.eyebrow {
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.intro h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    margin: 12px 0;
+    color: var(--navy);
+}
+
+.intro p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* SEARCH CARD */
+
+.panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 18px 55px #263c6410;
+}
+
+.panel h2 {
+    font-size: 18px;
+    margin-bottom: 7px;
+}
+
+.panel-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+
+.fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.required {
+    color: #df4b48;
+}
+
+.optional {
+    color: #8c98aa;
+    font-weight: 400;
+}
+
+.field input {
+    width: 100%;
+    height: 49px;
+    border: 1px solid #dce4f0;
+    border-radius: 10px;
+    padding: 0 13px;
+    outline: none;
+    font-size: 14px;
+    background: #fbfcff;
+}
+
+.field input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px #2563eb18;
+}
+
+.hint {
+    color: #8793a7;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+/* BUTTONS */
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 23px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.btn {
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    padding: 0 22px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.search-btn {
+    background: var(--blue);
+    color: white;
+    flex: 1;
+}
+
+.search-btn:hover {
+    background: #1d4ed8;
+}
+
+.clear-btn {
+    background: #eef2f8;
+    color: #53617a;
+}
+
+/* MESSAGES */
+
+.message {
+    display: none;
+    margin-top: 18px;
+    padding: 13px;
+    border-radius: 9px;
+    font-size: 13px;
+}
+
+.error {
+    display: block;
+    background: #fff2f1;
+    color: #b43d35;
+    border: 1px solid #ffd9d5;
+}
+
+/* RESULT */
+
+.result {
+    display: none;
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.result-head {
+    background: #f7f9fe;
+    padding: 17px 20px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.result-body {
+    padding: 20px;
+    display: grid;
+    gap: 18px;
+}
+
+.detail-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #8995a8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.credential {
+    background: #f8faff;
+    border: 1px solid #e6ecf7;
+    border-radius: 11px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.credential-value {
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.email-value {
+    color: #1d4ed8;
+}
+
+.password-value {
+    font-family: Consolas, monospace;
+}
+
+.copy-btn {
+    border: 1px solid #dce4f0;
+    background: white;
+    color: var(--blue);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* MICROSOFT PRODUCTS */
+
+.products {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.products h2 {
+    font-size: 12px;
+    color: #64728a;
+    letter-spacing: 1.5px;
+    margin-bottom: 17px;
+}
+
+.product-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid #e6ebf3;
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 11px;
+    font-weight: 650;
+    color: #48566e;
+}
+
+.app-icon {
+    width: 25px;
+    height: 25px;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    color: white;
+    font-weight: 900;
+    font-size: 12px;
+}
+
+.outlook { background: #0877d1; }
+.word { background: #185abd; }
+.excel { background: #107c41; }
+.powerpoint { background: #c43e1c; }
+.teams { background: #6264a7; }
+.onedrive { background: #1689d5; }
+.office { background: linear-gradient(135deg, #e74c3c, #f39c12, #2d9cdb); }
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #9aa5b7;
+    font-size: 11px;
+    padding: 22px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 600px) {
+
+    header {
+        padding: 0 4%;
+    }
+
+    .header-label {
+        display: none;
+    }
+
+    main {
+        margin: 35px auto;
+    }
+
+    .panel {
+        padding: 22px 18px;
+    }
+
+    .fields {
+        grid-template-columns: 1fr;
+    }
+
+    .credential {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .copy-btn {
+        align-self: flex-end;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo">AIT</div>
+        <div>
+            MICROSOFT ACCOUNT PORTAL
+            <small>ALIGARH INSTITUTE OF TECHNOLOGY</small>
+        </div>
+    </div>
+
+    <div class="header-label">
+        MICROSOFT 365 ACCESS
+    </div>
+</header>
+
+<main>
+
+    <section class="intro">
+        <div class="eyebrow">STUDENT ACCOUNT SERVICES</div>
+
+        <h1>Microsoft ID Finder</h1>
+
+        <p>
+            Find your Microsoft account username and password
+            using your GR number.
+        </p>
+    </section>
+
+    <section class="panel">
+
+        <h2>Find Account Credentials</h2>
+
+        <p class="panel-sub">
+            GR Number is required. Student Name is optional.
+        </p>
+
+        <form id="searchForm">
+
+            <div class="fields">
+
+                <div class="field">
+                    <label>
+                        GR Number <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="grNumber"
+                        placeholder="e.g. 1001"
+                        required
+                        autocomplete="off"
+                    >
+
+                    <div class="hint">
+                        Enter your GR number
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>
+                        Student Name
+                        <span class="optional">(Optional)</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="studentName"
+                        placeholder="Enter student name"
+                        autocomplete="off"
+                    >
+
+                    <div class="hint">
+                        Enter name for additional verification
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <button class="btn search-btn" type="submit">
+                    Find Microsoft ID →
+                </button>
+
+                <button class="btn clear-btn" type="button" id="clearBtn">
+                    Clear
+                </button>
+
+            </div>
+
+        </form>
+
+        <div id="message" class="message"></div>
+
+        <div id="result" class="result">
+
+            <div class="result-head">
+                Microsoft Account Details
+            </div>
+
+            <div class="result-body">
+
+                <div>
+                    <div class="detail-label">
+                        Username / Email Address
+                    </div>
+
+                    <div class="credential">
+                        <div
+                            class="credential-value email-value"
+                            id="outUsername">
+                        </div>
+
+                        <button
+                            class="copy-btn"
+                            type="button"
+                            data-copy="outUsername">
+                            Copy Username
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="detail-label">
+                        Password
+                    </div>
+
+                    <div class="credential">
+                        <div
+                            class="credential-value password-value"
+                            id="outPassword">
+                        </div>
+
+                        <button
+                            class="copy-btn"
+                            type="button"
+                            data-copy="outPassword">
+                            Copy Password
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MICROSOFT PRODUCTS -->
+
+    <section class="products">
+
+        <h2>COMPATIBLE WITH MICROSOFT PRODUCTS</h2>
+
+        <div class="product-list">
+
+            <div class="product">
+                <span class="app-icon office">M</span>
+                Microsoft 365
+            </div>
+
+            <div class="product">
+                <span class="app-icon outlook">O</span>
+                Outlook
+            </div>
+
+            <div class="product">
+                <span class="app-icon word">W</span>
+                Word
+            </div>
+
+            <div class="product">
+                <span class="app-icon excel">X</span>
+                Excel
+            </div>
+
+            <div class="product">
+                <span class="app-icon powerpoint">P</span>
+                PowerPoint
+            </div>
+
+            <div class="product">
+                <span class="app-icon teams">T</span>
+                Teams
+            </div>
+
+            <div class="product">
+                <span class="app-icon onedrive">☁</span>
+                OneDrive
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © Aligarh Institute of Technology · Microsoft Account Support
+</footer>
+
+<script>
+
+/*
+  PASTE YOUR EXCEL STUDENT DATA HERE.
+
+  Format:
+  {
+    name: "STUDENT NAME",
+    gr: "1001",
+    username: "student@email.com",
+    password: "password"
+  }
+*/
+
+const students = [
+    {
+        name: "SYED SHAHEER IMRAN",
+        gr: "3001",
+        username: "AIT-261-401-3001@ALIGARH.EDU.PK",
+        password: "Sh@h%er/3001"
+    },
+    {
+        name: "SYEDA AKIFA SIDDIQUA",
+        gr: "3002",
+        username: "AIT-261-401-3002@ALIGARH.EDU.PK",
+        password: "Ak@h%a/3002"
+    },
+    {
+        name: "MOHSIN ALI",
+        gr: "3003",
+        username: "AIT-261-401-3003@ALIGARH.EDU.PK",
+        password: "Al@h%/3003"
+    },
+    {
+        name: "UZAIR KHAN",
+        gr: "3004",
+        username: "AIT-261-401-3004@ALIGARH.EDU.PK",
+        password: "Kh@h%/3004"
+    },
+    {
+        name: "SHARMEEN AHMED",
+        gr: "3006",
+        username: "AIT-261-401-3006@ALIGARH.EDU.PK",
+        password: "Ah@h%hmed/3006"
+    },
+    {
+        name: "MUHAMMAD AHMAD",
+        gr: "3007",
+        username: "AIT-261-401-3007@ALIGARH.EDU.PK",
+        password: "Ah@h%hmad/3007"
+    },
+    {
+        name: "MOIZ SHAHID",
+        gr: "3008",
+        username: "AIT-261-401-3008@ALIGARH.EDU.PK",
+        password: "Sh@h%d/3008"
+    },
+    {
+        name: "TAHA ZAMAN KHAN",
+        gr: "3009",
+        username: "AIT-261-401-3009@ALIGARH.EDU.PK",
+        password: "Za@h%/3009"
+    },
+    {
+        name: "SHAHEER NOMAN",
+        gr: "3010",
+        username: "AIT-261-401-3010@ALIGARH.EDU.PK",
+        password: "No@h%man/3010"
+    },
+    {
+        name: "SHAYAAL JOHN",
+        gr: "1001",
+        username: "AIT-261-401-1001@ALIGARH.EDU.PK",
+        password: "Jo@h%hn/1001"
+    },
+    {
+        name: "SYED HAMZA SHAHZAD",
+        gr: "3011",
+        username: "AIT-261-401-3011@ALIGARH.EDU.PK",
+        password: "Ha@h%/3011"
+    },
+    {
+        name: "BILAL FAISAL",
+        gr: "3012",
+        username: "AIT-261-401-3012@ALIGARH.EDU.PK",
+        password: "Fa@h%al/3012"
+    },
+    {
+        name: "SYED ABDUL BARI",
+        gr: "3013",
+        username: "AIT-261-401-3013@ALIGARH.EDU.PK",
+        password: "Ab@h%/3013"
+    },
+    {
+        name: "SHAYAAL JOHN",
+        gr: "3015",
+        username: "AIT-261-401-3015@ALIGARH.EDU.PK",
+        password: "Jo@h%hn/3015"
+    },
+    {
+        name: "MUHAMMAD WASIF",
+        gr: "3016",
+        username: "AIT-261-401-3016@ALIGARH.EDU.PK",
+        password: "Wa@h%asif/3016"
+    },
+    {
+        name: "SHAYAN HUSSAIN",
+        gr: "3017",
+        username: "AIT-261-401-3017@ALIGARH.EDU.PK",
+        password: "Hu@h%sain/3017"
+    },
+    {
+        name: "FAHAD MUNEER SHAHABI",
+        gr: "3018",
+        username: "AIT-261-401-3018@ALIGARH.EDU.PK",
+        password: "Mu@h%er/3018"
+    },
+    {
+        name: "SAMIA SIDDIQUI",
+        gr: "3019",
+        username: "AIT-261-401-3019@ALIGARH.EDU.PK",
+        password: "Si@h%iqui/3019"
+    },
+    {
+        name: "MUHAMMAD SHAHEER",
+        gr: "3020",
+        username: "AIT-261-401-3020@ALIGARH.EDU.PK",
+        password: "Sh@h%haheer/3020"
+    },
+    {
+        name: "ALI ABBAS",
+        gr: "3021",
+        username: "AIT-261-401-3021@ALIGARH.EDU.PK",
+        password: "Ab@h%li/3021"
+    },
+    {
+        name: "MUHAMMAD JAMAL",
+        gr: "3022",
+        username: "AIT-261-401-3022@ALIGARH.EDU.PK",
+        password: "Ja@h%amal/3022"
+    },
+    {
+        name: "MUHAMMAD SUFIYAN",
+        gr: "3023",
+        username: "AIT-261-401-3023@ALIGARH.EDU.PK",
+        password: "Su@h%ufiyan/3023"
+    },
+    {
+        name: "IRFAN AHMED",
+        gr: "3024",
+        username: "AIT-261-401-3024@ALIGARH.EDU.PK",
+        password: "Ah@h%d/3024"
+    },
+
+    // Add remaining students from your Excel file here.
+
+];
+
+const form = document.getElementById("searchForm");
+
+const grInput = document.getElementById("grNumber");
+const nameInput = document.getElementById("studentName");
+
+const message = document.getElementById("message");
+const result = document.getElementById("result");
+
+function normalize(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+}
+
+function hideResults() {
+    result.style.display = "none";
+    message.className = "message";
+    message.textContent = "";
+}
+
+form.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    hideResults();
+
+    const gr = normalize(grInput.value);
+    const name = normalize(nameInput.value);
+
+    if (!gr) {
+
+        message.textContent =
+            "GR Number is required.";
+
+        message.className = "message error";
+
+        return;
+    }
+
+    const matches = students.filter(student => {
+
+        return normalize(student.gr) === gr &&
+        (!name || normalize(student.name).includes(name));
+
+    });
+
+    if (matches.length === 0) {
+
+        message.textContent =
+            "No matching account found. Please check your GR number and name.";
+
+        message.className = "message error";
+
+        return;
+    }
+
+    const student = matches[0];
+
+    document.getElementById("outUsername").textContent =
+        student.username;
+
+    document.getElementById("outPassword").textContent =
+        student.password || "Password not available. Contact department.";
+
+    result.style.display = "block";
+
+});
+
+// CLEAR BUTTON
+
+document.getElementById("clearBtn").addEventListener("click", function() {
+
+    form.reset();
+
+    hideResults();
+
+});
+
+// COPY BUTTONS
+
+document.querySelectorAll("[data-copy]").forEach(button => {
+
+    button.addEventListener("click", async function() {
+
+        const element = document.getElementById(
+            button.dataset.copy
+        );
+
+        const value = element.textContent;
+
+        try {
+
+            await navigator.clipboard.writeText(value);
+
+            const oldText = button.textContent;
+
+            button.textContent = "Copied!";
+
+            setTimeout(() => {
+                button.textContent = oldText;
+            }, 1500);
+
+        } catch (error) {
+
+            button.textContent = "Copy unavailable";
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
